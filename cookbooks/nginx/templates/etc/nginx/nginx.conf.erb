@@ -1,0 +1,40 @@
+user  <%= @nginx_user %>;
+worker_processes auto;
+
+error_log  /var/log/nginx/error.log;
+
+pid <%= @nginx_pid %>;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format  ltsv  'time:$time_local\t'
+                      'remote_addr:$remote_addr\t'
+                      'binary_remote_addr:$binary_remote_addr\t'
+                      'status:$status\t'
+                      'bytes:$body_bytes_sent\t'
+                      'request:$request\t'
+                      'referer:$http_referer\t'
+                      'user_agent:$http_user_agent\t'
+                      'request_time:$request_time\t'
+                      'response_time:$upstream_response_time\t'
+                      'cache_status:$upstream_cache_status\t';
+
+    sendfile        on;
+    tcp_nopush      on;
+    tcp_nodelay     on;
+    keepalive_timeout  65;
+    types_hash_max_size 2048;
+
+    gzip            on;
+    gzip_types      *;
+    include /etc/nginx/site-enabled/*.conf;
+}

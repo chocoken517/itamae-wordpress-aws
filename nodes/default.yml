@@ -1,0 +1,18 @@
+sites:
+  -
+    domain: ja.example.com
+    table_prefix: ja_
+  -
+    domain: en.example.com
+    table_prefix: en_
+  -
+    domain: zh-cn.example.com
+    table_prefix: zh_ch_
+  -
+    domain: zh-tw.example.com
+    table_prefix: zh_tw_
+wordpress:
+  directory: '/var/www'
+db:
+  name: example_name
+  user: example_user

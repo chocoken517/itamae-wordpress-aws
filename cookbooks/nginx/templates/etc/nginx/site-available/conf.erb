@@ -1,0 +1,25 @@
+server {
+  listen 80;
+
+  server_name <%= @server_name %>;
+
+  access_log  /var/log/nginx/<%= @server_name %>/access.log ltsv;
+  error_log  /var/log/nginx/<%= @server_name %>/error.log;
+
+  try_files $uri $uri/ /index.php?q=$uri&$args;
+
+  location ~* /wp-config.php {
+    deny all;
+  }
+
+  root <%= @directory %>/<%= @server_name %>;
+  index index.php;
+
+  location ~ \.php$ {
+    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param PATH_INFO $fastcgi_script_name;
+    include fastcgi_params;
+  }
+}
